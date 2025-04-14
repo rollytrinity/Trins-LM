@@ -7,3 +7,4 @@ transformers==4.50.3
 plotly==6.0.1
 scikit-learn==1.5.2
 gdown==5.2.0
+gensim==4.3.3
