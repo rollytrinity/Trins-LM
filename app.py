@@ -1,10 +1,8 @@
 import streamlit as st
 from trigrams import TrigramModel  # Import the trigram model
 import os
-import matplotlib.pyplot as plt
 import torch
 import numpy as np
-import altair as alt
 from transformers import GPT2LMHeadModel, GPT2Tokenizer
 import pandas as pd
 import plotly.graph_objects as go
@@ -15,11 +13,6 @@ import plotly.express as px
 
 
 st.set_page_config(layout="wide", page_title="Trin's LM Explorer", page_icon=":robot:")
-
-os.environ["MPLCONFIGDIR"] = "./matplotlib"
-import matplotlib.pyplot as plt
-print("Matplotlib imported.")
-
 
 left_co, cent_co,last_co = st.columns(3)
 with cent_co:
