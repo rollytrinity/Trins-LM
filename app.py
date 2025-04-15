@@ -331,7 +331,8 @@ with tab5:
 with tab3:
     st.header("How do we represent words with numbers?")
     if "embeddings" not in st.session_state:
-        st.session_state.embeddings = load_word2vec_model()
+        with st.spinner("Loading word embeddings... (this takes a while! Be patient)"):
+            st.session_state.embeddings = load_word2vec_model()
 
     st.session_state.city_words = ['Aberdeen', 'Edinburgh', 'Glasgow', 'Inverness', 'Dundee']
     st.session_state.animal_words = ['dog', 'cat', 'fish', 'horse', 'cow']
@@ -405,7 +406,8 @@ with tab3:
         
 
 with tab6:
-    model, tokenizer = load_model("gpt2")
+    with st.spinner("Loading GPT...2 model... (this takes a while! Be patient)"):
+        model, tokenizer = load_model("gpt2")
     # Ensure model is in evaluation mode
     model.eval()
 
