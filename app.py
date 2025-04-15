@@ -20,7 +20,6 @@ with cent_co:
 
 import nltk
 nltk.download('punkt_tab')
-st.write("App is live and waiting for your input!")
 
 import gdown
 
