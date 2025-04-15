@@ -87,7 +87,7 @@ def load_model(model_name="local_gpt2"):
     tokenizer = GPT2Tokenizer.from_pretrained(model_name)
     return model, tokenizer
 
-model, tokenizer = load_model("local_gpt2")
+model, tokenizer = load_model("gpt2")
 
 if "embeddings" not in st.session_state:
     st.session_state.embeddings = load_word2vec_model()
