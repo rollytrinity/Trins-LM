@@ -75,17 +75,17 @@ def load_word2vec_model():
 
 @st.cache_resource
 def load_model(model_name="local_gpt2"):
-    if os.path.exists('model/local_gpt2'):
-        model = GPT2LMHeadModel.from_pretrained('model/local_gpt2')
-        tokenizer = GPT2Tokenizer.from_pretrained('model/local_gpt2')
+    if os.path.exists('models/local_gpt2'):
+        model = GPT2LMHeadModel.from_pretrained('models/local_gpt2')
+        tokenizer = GPT2Tokenizer.from_pretrained('models/local_gpt2')
         
     else:
         model = GPT2LMHeadModel.from_pretrained(model_name)
         tokenizer = GPT2Tokenizer.from_pretrained(model_name)
 
         # Save the model locally
-        model.save_pretrained('model/local_gpt2')
-        tokenizer.save_pretrained('model/local_gpt2')
+        model.save_pretrained('models/local_gpt2')
+        tokenizer.save_pretrained('models/local_gpt2')
     return model, tokenizer
     
 
