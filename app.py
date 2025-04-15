@@ -18,6 +18,8 @@ st.set_page_config(layout="wide", page_title="Trin's LM Explorer", page_icon=":r
 
 os.environ["MPLCONFIGDIR"] = "./matplotlib"
 import matplotlib.pyplot as plt
+print("Matplotlib imported.")
+
 
 left_co, cent_co,last_co = st.columns(3)
 with cent_co:
