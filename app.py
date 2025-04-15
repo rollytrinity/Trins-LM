@@ -418,9 +418,13 @@ with tab3:
 
 with tab6:
         
-    if "model" not in st.session_state:
+    if "model" not in st.session_state or "tokenizer" not in st.session_state:
         model, tokenizer = load_model("gpt2")
         st.session_state.model = model
+        st.session_state.tokenizer = tokenizer
+
+    model = st.session_state.model
+    tokenizer = st.session_state.tokenizer
 
     model.eval()
 
@@ -498,6 +502,7 @@ with tab6:
                 sizes.append(1)
 
         d3.set_node_properties(color=labels, size=sizes)
+        #d3.set_node_properties(label_color='#785a7d') 
 
         # Plot
         d3.show(show_slider=False)
