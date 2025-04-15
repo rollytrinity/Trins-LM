@@ -79,21 +79,6 @@ def load_model(model_name="local_gpt2"):
     tokenizer = GPT2Tokenizer.from_pretrained(model_name)
     return model, tokenizer
 
-model, tokenizer = load_model("gpt2")
-
-if "embeddings" not in st.session_state:
-    st.session_state.embeddings = load_word2vec_model()
-
-st.session_state.city_words = ['Aberdeen', 'Edinburgh', 'Glasgow', 'Inverness', 'Dundee']
-st.session_state.animal_words = ['dog', 'cat', 'fish', 'horse', 'cow']
-
-if "your_words" not in st.session_state:
-    st.session_state.your_words = []
-
-if "tsne" not in st.session_state:
-    vectors = np.array([st.session_state.embeddings[word] for word in st.session_state.city_words + st.session_state.animal_words])
-    st.session_state.tsne = TSNE(n_components=2, perplexity=5, random_state=42)
-    reduced = st.session_state.tsne.fit_transform(vectors)
 
 # Define dataset path
 dataset_options = {"Hunger Games": "data/hunger_games.txt", "Kung Fu Panda": "data/KFP1Script.csv"}
@@ -345,6 +330,19 @@ with tab5:
 
 with tab3:
     st.header("How do we represent words with numbers?")
+    if "embeddings" not in st.session_state:
+        st.session_state.embeddings = load_word2vec_model()
+
+    st.session_state.city_words = ['Aberdeen', 'Edinburgh', 'Glasgow', 'Inverness', 'Dundee']
+    st.session_state.animal_words = ['dog', 'cat', 'fish', 'horse', 'cow']
+
+    if "your_words" not in st.session_state:
+        st.session_state.your_words = []
+
+    if "tsne" not in st.session_state:
+        vectors = np.array([st.session_state.embeddings[word] for word in st.session_state.city_words + st.session_state.animal_words])
+        st.session_state.tsne = TSNE(n_components=2, perplexity=5, random_state=42)
+        reduced = st.session_state.tsne.fit_transform(vectors)
 
     embeddings = st.session_state.embeddings
 
@@ -407,6 +405,7 @@ with tab3:
         
 
 with tab6:
+    model, tokenizer = load_model("gpt2")
     # Ensure model is in evaluation mode
     model.eval()
 
