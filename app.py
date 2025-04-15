@@ -65,7 +65,7 @@ def is_custom_dataset_empty():
 def load_word2vec_model():
 
     url = "https://drive.google.com/uc?export=download&id=16f4O2RA8M_PaxS09NheAwS4GqZGY4Hqy"
-    output = "word2vec-google-news-300.bin"
+    output = "models/word2vec-google-news-300.bin"
 
     if not os.path.exists(output):
         gdown.download(url, output, quiet=False)
@@ -75,10 +75,19 @@ def load_word2vec_model():
 
 @st.cache_resource
 def load_model(model_name="local_gpt2"):
-    model = GPT2LMHeadModel.from_pretrained(model_name)
-    tokenizer = GPT2Tokenizer.from_pretrained(model_name)
-    return model, tokenizer
+    if os.path.exists('model/local_gpt2'):
+        model = GPT2LMHeadModel.from_pretrained('model/local_gpt2')
+        tokenizer = GPT2Tokenizer.from_pretrained('model/local_gpt2')
+        
+    else:
+        model = GPT2LMHeadModel.from_pretrained(model_name)
+        tokenizer = GPT2Tokenizer.from_pretrained(model_name)
 
+        # Save the model locally
+        model.save_pretrained('model/local_gpt2')
+        tokenizer.save_pretrained('model/local_gpt2')
+    return model, tokenizer
+    
 
 # Define dataset path
 dataset_options = {"Hunger Games": "data/hunger_games.txt", "Kung Fu Panda": "data/KFP1Script.csv"}
