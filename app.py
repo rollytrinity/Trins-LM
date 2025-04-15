@@ -11,7 +11,6 @@ from streamlit_d3graph import d3graph, vec2adjmat
 from sklearn.manifold import TSNE
 import plotly.express as px
 
-
 st.set_page_config(layout="wide", page_title="Trin's LM Explorer", page_icon=":robot:")
 
 left_co, cent_co,last_co = st.columns(3)
@@ -92,6 +91,9 @@ def load_model(model_name="local_gpt2"):
 # Define dataset path
 dataset_options = {"Hunger Games": "data/hunger_games.txt", "Kung Fu Panda": "data/KFP1Script.csv"}
 custom_dataset_path = "data/custom_dataset.txt"
+
+if "embeddings loaded" not in st.session_state:
+    st.session_state.embeddings_loaded = False
 
 # Create a multi-page app with sidebar options as a list
 
@@ -339,9 +341,9 @@ with tab5:
 
 with tab3:
     st.header("How do we represent words with numbers?")
-    if "embeddings" not in st.session_state:
-        with st.spinner("Loading word embeddings... (this takes a while! Be patient)"):
+    if "embeddings" not in st.session_state and not st.session_state.embeddings_loaded:
             st.session_state.embeddings = load_word2vec_model()
+            st.session_state.embeddings_loaded = True
 
     st.session_state.city_words = ['Aberdeen', 'Edinburgh', 'Glasgow', 'Inverness', 'Dundee']
     st.session_state.animal_words = ['dog', 'cat', 'fish', 'horse', 'cow']
@@ -415,9 +417,11 @@ with tab3:
         
 
 with tab6:
-    with st.spinner("Loading GPT...2 model... (this takes a while! Be patient)"):
+        
+    if "model" not in st.session_state:
         model, tokenizer = load_model("gpt2")
-    # Ensure model is in evaluation mode
+        st.session_state.model = model
+
     model.eval()
 
     # Initialize sentence with a starting token
