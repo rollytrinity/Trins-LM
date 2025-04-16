@@ -20,7 +20,7 @@ with cent_co:
     st.image('pics/trinslm.png')
 
 import nltk
-with st.spinner("Loading"):
+if st.button("Load"):
     nltk.download('punkt_tab')
 
 import gdown
