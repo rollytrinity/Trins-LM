@@ -342,6 +342,7 @@ with tab5:
 with tab3:
     st.header("How do we represent words with numbers?")
     if "embeddings" not in st.session_state and not st.session_state.embeddings_loaded:
+        if st.button("Load"):
             st.session_state.embeddings = load_word2vec_model()
             st.session_state.embeddings_loaded = True
 
@@ -425,89 +426,90 @@ with tab6:
         st.session_state.model = model
         st.session_state.tokenizer = tokenizer
 
-    model = st.session_state.model
-    tokenizer = st.session_state.tokenizer
+    else:
+        model = st.session_state.model
+        tokenizer = st.session_state.tokenizer
 
-    model.eval()
+        model.eval()
 
-    # Initialize sentence with a starting token
-    if 'sentence' not in st.session_state:
-        st.session_state.sentence = []
+        # Initialize sentence with a starting token
+        if 'sentence' not in st.session_state:
+            st.session_state.sentence = []
 
-    # Streamlit Interface
-    st.header("Visualising Prediction")
+        # Streamlit Interface
+        st.header("Visualising Prediction")
 
-    # Display the sentence
-    col1, col2 = st.columns([4, 6])  # Adjust ratios to control width
-    with col1:
-        st.session_state.sentence = st.text_input(label='Enter a sentence:')
-        
-    st.session_state.sentence = st.session_state.sentence.split()
+        # Display the sentence
+        col1, col2 = st.columns([4, 6])  # Adjust ratios to control width
+        with col1:
+            st.session_state.sentence = st.text_input(label='Enter a sentence:')
+            
+        st.session_state.sentence = st.session_state.sentence.split()
 
-    # Get the next word probabilities using the actual model
-    if len(st.session_state.sentence) > 0:
-        predictions = get_top_predictions(" ".join(st.session_state.sentence), num_predictions=10)
+        # Get the next word probabilities using the actual model
+        if len(st.session_state.sentence) > 0:
+            predictions = get_top_predictions(" ".join(st.session_state.sentence), num_predictions=10)
 
-        # Get next word probabilities
-        words, probabilities = zip(*predictions)
-        print(predictions)
-        prev_word = [st.session_state.sentence[-1]]
-        words = list(words)
-        probabilities = [round(x,2) for x in probabilities]
+            # Get next word probabilities
+            words, probabilities = zip(*predictions)
+            print(predictions)
+            prev_word = [st.session_state.sentence[-1]]
+            words = list(words)
+            probabilities = [round(x,2) for x in probabilities]
 
-        # Source node names
-        source = prev_word * len(words)
-        # Target node names
-        target = words[:]
-        # Edge Weights
-        weight = probabilities
+            # Source node names
+            source = prev_word * len(words)
+            # Target node names
+            target = words[:]
+            # Edge Weights
+            weight = probabilities
 
-        words = [x for x in words if x not in prev_word]
+            words = [x for x in words if x not in prev_word]
 
-        for word in words:
-            predictions = get_top_predictions(" ".join(st.session_state.sentence) + " " + word, num_predictions=10)
+            for word in words:
+                predictions = get_top_predictions(" ".join(st.session_state.sentence) + " " + word, num_predictions=10)
 
-            if len(predictions) > 0:
-                next_words, next_probabilities = zip(*predictions)
+                if len(predictions) > 0:
+                    next_words, next_probabilities = zip(*predictions)
 
-                next_probabilities = [round(x,2) for x in next_probabilities]
-                next_words = list(next_words)
+                    next_probabilities = [round(x,2) for x in next_probabilities]
+                    next_words = list(next_words)
 
-                source += [word] * len(next_words)
-                target += next_words
-                weight += next_probabilities
+                    source += [word] * len(next_words)
+                    target += next_words
+                    weight += next_probabilities
 
 
-        # Convert the vector into a adjacency matrix
-        adjmat = vec2adjmat(source, target, weight=weight)
+            # Convert the vector into a adjacency matrix
+            adjmat = vec2adjmat(source, target, weight=weight)
 
-        # Initialize
-        d3 = d3graph(slider=None, charge=1000)
+            # Initialize
+            d3 = d3graph(slider=None, charge=1000)
 
-        # Process adjmat
-        d3.graph(adjmat, color=None, cmap='viridis')
+            # Process adjmat
+            d3.graph(adjmat, color=None, cmap='viridis')
 
-        unique_nodes = list(d3.node_properties.keys())
+            unique_nodes = list(d3.node_properties.keys())
 
-        labels = []
-        sizes = []
+            labels = []
+            sizes = []
 
-        for node in unique_nodes:
-            if node == st.session_state.sentence[-1]:
-                labels.append('#D16D82')  # Root node
-                sizes.append(3)
-            elif node in words:
-                labels.append('#87BBD9')  # First layer
-                sizes.append(2)
-            else:
-                labels.append('#4CAF91')  # Second layer
-                sizes.append(1)
+            for node in unique_nodes:
+                if node == st.session_state.sentence[-1]:
+                    labels.append('#D16D82')  # Root node
+                    sizes.append(3)
+                elif node in words:
+                    labels.append('#87BBD9')  # First layer
+                    sizes.append(2)
+                else:
+                    labels.append('#4CAF91')  # Second layer
+                    sizes.append(1)
 
-        d3.set_node_properties(color=labels, size=sizes)
-        #d3.set_node_properties(label_color='#785a7d') 
+            d3.set_node_properties(color=labels, size=sizes)
+            #d3.set_node_properties(label_color='#785a7d') 
 
-        # Plot
-        d3.show(show_slider=False)
+            # Plot
+            d3.show(show_slider=False)
 
     st.subheader("About")
     st.markdown("""
