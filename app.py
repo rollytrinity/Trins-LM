@@ -345,56 +345,58 @@ with tab3:
             st.session_state.embeddings = load_word2vec_model()
             st.session_state.embeddings_loaded = True
 
-    st.session_state.city_words = ['Aberdeen', 'Edinburgh', 'Glasgow', 'Inverness', 'Dundee']
-    st.session_state.animal_words = ['dog', 'cat', 'fish', 'horse', 'cow']
+    else:
 
-    if "your_words" not in st.session_state:
-        st.session_state.your_words = []
+        st.session_state.city_words = ['Aberdeen', 'Edinburgh', 'Glasgow', 'Inverness', 'Dundee']
+        st.session_state.animal_words = ['dog', 'cat', 'fish', 'horse', 'cow']
 
-    if "tsne" not in st.session_state:
-        vectors = np.array([st.session_state.embeddings[word] for word in st.session_state.city_words + st.session_state.animal_words])
-        st.session_state.tsne = TSNE(n_components=2, perplexity=5, random_state=42)
+        if "your_words" not in st.session_state:
+            st.session_state.your_words = []
+
+        if "tsne" not in st.session_state:
+            vectors = np.array([st.session_state.embeddings[word] for word in st.session_state.city_words + st.session_state.animal_words])
+            st.session_state.tsne = TSNE(n_components=2, perplexity=5, random_state=42)
+            reduced = st.session_state.tsne.fit_transform(vectors)
+
+        embeddings = st.session_state.embeddings
+
+        words = st.session_state.city_words + st.session_state.animal_words + st.session_state.your_words
+        vectors = np.array([embeddings[word] for word in words])
         reduced = st.session_state.tsne.fit_transform(vectors)
 
-    embeddings = st.session_state.embeddings
+        df = pd.DataFrame(reduced, columns=["x", "y"])
+        df["word"] = words
 
-    words = st.session_state.city_words + st.session_state.animal_words + st.session_state.your_words
-    vectors = np.array([embeddings[word] for word in words])
-    reduced = st.session_state.tsne.fit_transform(vectors)
+        groups = (
+            ["City"] * len(st.session_state.city_words) +
+            ["Animal"] * len(st.session_state.animal_words) +
+            ["Custom"] * len(st.session_state.your_words)
+        )
+        df["group"] = groups
 
-    df = pd.DataFrame(reduced, columns=["x", "y"])
-    df["word"] = words
+        pastel_palette = ["#A8CBB7", "#D8B4E2", "#87BBD9"]
 
-    groups = (
-        ["City"] * len(st.session_state.city_words) +
-        ["Animal"] * len(st.session_state.animal_words) +
-        ["Custom"] * len(st.session_state.your_words)
-    )
-    df["group"] = groups
+        # Plot with Plotly
+        fig = px.scatter(df, x="x", y="y", text="word", color="group", color_discrete_sequence=pastel_palette)
+        fig.update_traces(marker=dict(size=12))
+        fig.update_traces(textposition='top center')
+        fig.update_layout(
+            showlegend=False,
+            margin=dict(l=20, r=20, t=20, b=20),
+        )
+        fig.update_xaxes(showgrid=True, zeroline=False, visible=True)
+        fig.update_yaxes(showgrid=True, zeroline=False, visible=True)
 
-    pastel_palette = ["#A8CBB7", "#D8B4E2", "#87BBD9"]
+        # Show in Streamlit
+        st.plotly_chart(fig, use_container_width=True)
 
-    # Plot with Plotly
-    fig = px.scatter(df, x="x", y="y", text="word", color="group", color_discrete_sequence=pastel_palette)
-    fig.update_traces(marker=dict(size=12))
-    fig.update_traces(textposition='top center')
-    fig.update_layout(
-        showlegend=False,
-        margin=dict(l=20, r=20, t=20, b=20),
-    )
-    fig.update_xaxes(showgrid=True, zeroline=False, visible=True)
-    fig.update_yaxes(showgrid=True, zeroline=False, visible=True)
+        col1, col2, col3 = st.columns([2, 1, 6])  # Adjust ratios to control width
+        with col1:
+            new_word = st.text_input("Enter a new word to see its vector representation:")
 
-    # Show in Streamlit
-    st.plotly_chart(fig, use_container_width=True)
-
-    col1, col2, col3 = st.columns([2, 1, 6])  # Adjust ratios to control width
-    with col1:
-        new_word = st.text_input("Enter a new word to see its vector representation:")
-
-    if new_word != "" and new_word not in st.session_state.your_words:
-        st.session_state.your_words.append(new_word)
-        st.rerun()
+        if new_word != "" and new_word not in st.session_state.your_words:
+            st.session_state.your_words.append(new_word)
+            st.rerun()
 
     st.markdown("__________________________________________________________________")
     st.markdown("""
@@ -430,7 +432,7 @@ with tab6:
 
     # Initialize sentence with a starting token
     if 'sentence' not in st.session_state:
-        st.session_state.sentence = ["Hello"]
+        st.session_state.sentence = []
 
     # Streamlit Interface
     st.header("Visualising Prediction")
