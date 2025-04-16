@@ -10,8 +10,10 @@ import networkx as nx
 from streamlit_d3graph import d3graph, vec2adjmat
 from sklearn.manifold import TSNE
 import plotly.express as px
+import logging
 
 st.set_page_config(layout="wide", page_title="Trin's LM Explorer", page_icon=":robot:")
+logging.basicConfig(level=logging.DEBUG)
 
 left_co, cent_co,last_co = st.columns(3)
 with cent_co:
