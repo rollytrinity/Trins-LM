@@ -11,7 +11,10 @@ from streamlit_d3graph import d3graph, vec2adjmat
 from sklearn.manifold import TSNE
 import plotly.express as px
 import logging
+import nltk
 import gdown
+
+st.write("Stuff is happening")
 
 st.set_page_config(layout="wide", page_title="Trin's LM Explorer", page_icon=":robot:")
 logging.basicConfig(level=logging.DEBUG)
@@ -20,11 +23,9 @@ left_co, cent_co,last_co = st.columns(3)
 with cent_co:
     st.image('pics/trinslm.png')
 
-import nltk
-
 #nltk.download('punkt_tab')
 
-torch.classes.__path__ = []
+#torch.classes.__path__ = []
 
 # Function to get top next word predictions with probabilities
 def get_top_predictions(text, num_predictions=100):
