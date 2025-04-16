@@ -24,8 +24,6 @@ import nltk
 
 #nltk.download('punkt_tab')
 
-
-
 torch.classes.__path__ = []
 
 # Function to get top next word predictions with probabilities
@@ -346,10 +344,8 @@ with tab5:
 with tab3:
     st.header("How do we represent words with numbers?")
     if "embeddings" not in st.session_state and not st.session_state.embeddings_loaded:
-        if st.button("Load"):
-            #st.session_state.embeddings = load_word2vec_model()
-            #st.session_state.embeddings_loaded = True
-            pass
+        st.session_state.embeddings = load_word2vec_model()
+        st.session_state.embeddings_loaded = True
 
     else:
 
@@ -427,10 +423,9 @@ with tab3:
 with tab6:
         
     if "model" not in st.session_state or "tokenizer" not in st.session_state:
-        #model, tokenizer = load_model("gpt2")
-        #st.session_state.model = model
-        #st.session_state.tokenizer = tokenizer
-        pass
+        model, tokenizer = load_model("gpt2")
+        st.session_state.model = model
+        st.session_state.tokenizer = tokenizer
 
     else:
         model = st.session_state.model
