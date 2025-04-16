@@ -11,6 +11,7 @@ from streamlit_d3graph import d3graph, vec2adjmat
 from sklearn.manifold import TSNE
 import plotly.express as px
 import logging
+import gdown
 
 st.set_page_config(layout="wide", page_title="Trin's LM Explorer", page_icon=":robot:")
 logging.basicConfig(level=logging.DEBUG)
@@ -20,10 +21,10 @@ with cent_co:
     st.image('pics/trinslm.png')
 
 import nltk
-if st.button("Load"):
-    nltk.download('punkt_tab')
 
-import gdown
+#nltk.download('punkt_tab')
+
+
 
 torch.classes.__path__ = []
 
@@ -346,8 +347,9 @@ with tab3:
     st.header("How do we represent words with numbers?")
     if "embeddings" not in st.session_state and not st.session_state.embeddings_loaded:
         if st.button("Load"):
-            st.session_state.embeddings = load_word2vec_model()
-            st.session_state.embeddings_loaded = True
+            #st.session_state.embeddings = load_word2vec_model()
+            #st.session_state.embeddings_loaded = True
+            pass
 
     else:
 
@@ -425,9 +427,10 @@ with tab3:
 with tab6:
         
     if "model" not in st.session_state or "tokenizer" not in st.session_state:
-        model, tokenizer = load_model("gpt2")
-        st.session_state.model = model
-        st.session_state.tokenizer = tokenizer
+        #model, tokenizer = load_model("gpt2")
+        #st.session_state.model = model
+        #st.session_state.tokenizer = tokenizer
+        pass
 
     else:
         model = st.session_state.model
