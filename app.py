@@ -16,6 +16,11 @@ import huggingface_hub
 st.set_page_config(layout="wide", page_title="Trin's LM Explorer", page_icon=":robot:")
 logging.basicConfig(level=logging.DEBUG)
 
+if os.path.exists("/models"):
+    st.write("It's there")
+else:
+    print("It ain't!")
+
 left_co, cent_co,last_co = st.columns(3)
 with cent_co:
     st.image('pics/trinslm.png')
@@ -319,7 +324,7 @@ with tab3:
             huggingface_hub.hf_hub_download(
                 repo_id="NathaNn1111/word2vec-google-news-negative-300-bin",
                 filename="GoogleNews-vectors-negative300.bin",
-                local_dir="models"
+                local_dir="/models"
             )
 
         from gensim.models import KeyedVectors
