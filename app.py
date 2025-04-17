@@ -329,6 +329,7 @@ with tab3:
     if "embeddings" not in st.session_state and not st.session_state.embeddings_loaded:
         st.session_state.embeddings = load_word2vec_model()
         st.session_state.embeddings_loaded = True
+        st.rerun()
 
     else:
 
@@ -419,12 +420,14 @@ with tab6:
             model.save_pretrained('models/local_gpt2')
             tokenizer.save_pretrained('models/local_gpt2')
         return model, tokenizer
+
     
         
     if "model" not in st.session_state or "tokenizer" not in st.session_state:
         model, tokenizer = load_model("gpt2")
         st.session_state.model = model
         st.session_state.tokenizer = tokenizer
+        st.rerun()
 
     else:
         model = st.session_state.model
