@@ -265,6 +265,7 @@ with tab4:
     if dataset_choice == "Custom Dataset":
         use_laplace = True
 
+    nltk.download("punkt_tab")
     # Initialize the model with selected dataset and smoothing option
     trigram_model = TrigramModel(dataset_options[dataset_choice], laplace_smoothing=use_laplace, alpha=alpha)
     
