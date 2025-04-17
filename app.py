@@ -317,7 +317,7 @@ with tab3:
 
         if not os.path.exists(output):
             huggingface_hub.hf_hub_download(
-                repo_id="google/word2vec-google-news-300",
+                repo_id="fse/google/word2vec-google-news-300",
                 filename="word2vec-google-news-300.bin",
                 cache_dir="models"
             )
