@@ -10,7 +10,6 @@ from streamlit_d3graph import d3graph, vec2adjmat
 from sklearn.manifold import TSNE
 import plotly.express as px
 import logging
-import nltk
 import gdown
 
 
