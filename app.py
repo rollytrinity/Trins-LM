@@ -16,11 +16,6 @@ import huggingface_hub
 st.set_page_config(layout="wide", page_title="Trin's LM Explorer", page_icon=":robot:")
 logging.basicConfig(level=logging.DEBUG)
 
-if os.path.exists("/models"):
-    st.write("It's there")
-else:
-    print("It ain't!")
-
 left_co, cent_co,last_co = st.columns(3)
 with cent_co:
     st.image('pics/trinslm.png')
@@ -422,8 +417,8 @@ with tab6:
             tokenizer = GPT2Tokenizer.from_pretrained(model_name)
 
             # Save the model locally
-            model.save_pretrained('models/local_gpt2')
-            tokenizer.save_pretrained('models/local_gpt2')
+            model.save_pretrained('/models/local_gpt2')
+            tokenizer.save_pretrained('/models/local_gpt2')
         return model, tokenizer
 
     
