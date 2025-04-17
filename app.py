@@ -313,17 +313,17 @@ with tab3:
     @st.cache_resource
     def load_word2vec_model():
 
-        output = "models/word2vec-google-news-300.model"
+        output = "models/GoogleNews-vectors-negative300.bin"
 
         if not os.path.exists(output):
             huggingface_hub.hf_hub_download(
-                repo_id="fse/word2vec-google-news-300",
-                filename="word2vec-google-news-300.model",
-                cache_dir="models"
+                repo_id="NathaNn1111/word2vec-google-news-negative-300-bin",
+                filename="GoogleNews-vectors-negative300.bin",
+                local_dir="models"
             )
 
         from gensim.models import KeyedVectors
-        return KeyedVectors.load_word2vec_format(output, binary=True)
+        return KeyedVectors.load_word2vec_format(output, binary=True) 
 
     st.header("How do we represent words with numbers?")
     if "embeddings" not in st.session_state and not st.session_state.embeddings_loaded:
