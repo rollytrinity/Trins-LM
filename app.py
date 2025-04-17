@@ -13,8 +13,6 @@ import logging
 import nltk
 import gdown
 
-st.write("Stuff is happening")
-
 st.set_page_config(layout="wide", page_title="Trin's LM Explorer", page_icon=":robot:")
 logging.basicConfig(level=logging.DEBUG)
 
