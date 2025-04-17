@@ -313,12 +313,12 @@ with tab3:
     @st.cache_resource
     def load_word2vec_model():
 
-        output = "models/word2vec-google-news-300.bin"
+        output = "models/word2vec-google-news-300.model"
 
         if not os.path.exists(output):
             huggingface_hub.hf_hub_download(
                 repo_id="fse/word2vec-google-news-300",
-                filename="word2vec-google-news-300.bin",
+                filename="word2vec-google-news-300.model",
                 cache_dir="models"
             )
 
