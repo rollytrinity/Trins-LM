@@ -318,7 +318,7 @@ with tab3:
     @st.cache_resource
     def load_word2vec_model():
 
-        output = "/models/GoogleNews-vectors-negative300.bin"
+        output = "/mnt/models/GoogleNews-vectors-negative300.bin"
 
         if not os.path.exists(output):
             huggingface_hub.hf_hub_download(
@@ -413,7 +413,7 @@ with tab6:
     @st.cache_resource
     def load_model(model_name="local_gpt2"):
         from transformers import GPT2LMHeadModel, GPT2Tokenizer
-        if os.path.exists('/models/local_gpt2'):
+        if os.path.exists('/mnt/models/local_gpt2'):
             model = GPT2LMHeadModel.from_pretrained('models/local_gpt2')
             tokenizer = GPT2Tokenizer.from_pretrained('models/local_gpt2')
             
