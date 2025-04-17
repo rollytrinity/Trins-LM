@@ -409,8 +409,8 @@ with tab6:
     def load_model(model_name="local_gpt2"):
         from transformers import GPT2LMHeadModel, GPT2Tokenizer
         if os.path.exists('/models/local_gpt2'):
-            model = GPT2LMHeadModel.from_pretrained('models/local_gpt2')
-            tokenizer = GPT2Tokenizer.from_pretrained('models/local_gpt2')
+            model = GPT2LMHeadModel.from_pretrained('/models/local_gpt2')
+            tokenizer = GPT2Tokenizer.from_pretrained('/models/local_gpt2')
             
         else:
             model = GPT2LMHeadModel.from_pretrained(model_name)
