@@ -11,7 +11,7 @@ from sklearn.manifold import TSNE
 import plotly.express as px
 import logging
 import nltk
-import gdown
+import huggingface_hub 
 
 st.set_page_config(layout="wide", page_title="Trin's LM Explorer", page_icon=":robot:")
 logging.basicConfig(level=logging.DEBUG)
@@ -19,10 +19,6 @@ logging.basicConfig(level=logging.DEBUG)
 left_co, cent_co,last_co = st.columns(3)
 with cent_co:
     st.image('pics/trinslm.png')
-
-#nltk.download('punkt_tab')
-
-#torch.classes.__path__ = []
 
 # Function to get top next word predictions with probabilities
 def get_top_predictions(text, num_predictions=100):
@@ -317,11 +313,14 @@ with tab3:
     @st.cache_resource
     def load_word2vec_model():
 
-        url = "https://drive.google.com/uc?export=download&id=16f4O2RA8M_PaxS09NheAwS4GqZGY4Hqy"
         output = "models/word2vec-google-news-300.bin"
 
         if not os.path.exists(output):
-            gdown.download(url, output, quiet=False)
+            huggingface_hub.hf_hub_download(
+                repo_id="google/word2vec-google-news-300",
+                filename="word2vec-google-news-300.bin",
+                cache_dir="models"
+            )
 
         from gensim.models import KeyedVectors
         return KeyedVectors.load_word2vec_format(output, binary=True)
