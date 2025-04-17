@@ -508,7 +508,7 @@ with tab6:
                     labels.append('#4CAF91')  # Second layer
                     sizes.append(1)
 
-            d3.set_node_properties(color=labels, size=sizes)
+            d3.set_node_properties(color=labels, size=sizes, fontcolor='#785a7d')
             #d3.set_node_properties(label_color='#785a7d') 
 
             # Plot
