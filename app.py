@@ -3,7 +3,6 @@ from trigrams import TrigramModel  # Import the trigram model
 import os
 import torch
 import numpy as np
-from transformers import GPT2LMHeadModel, GPT2Tokenizer
 import pandas as pd
 import plotly.graph_objects as go
 import networkx as nx
