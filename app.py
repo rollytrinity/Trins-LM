@@ -14,7 +14,10 @@ import nltk
 import huggingface_hub 
 
 st.set_page_config(layout="wide", page_title="Trin's LM Explorer", page_icon=":robot:")
+
+custom_dataset_path = "data/custom_dataset.txt"
 open(custom_dataset_path, "w").close()
+
 logging.basicConfig(level=logging.DEBUG)
 
 left_co, cent_co,last_co = st.columns(3)
@@ -60,7 +63,7 @@ def is_custom_dataset_empty():
 
 # Define dataset path
 dataset_options = {"Hunger Games": "data/hunger_games.txt", "Kung Fu Panda": "data/KFP1Script.csv"}
-custom_dataset_path = "data/custom_dataset.txt"
+
 
 if "embeddings loaded" not in st.session_state:
     st.session_state.embeddings_loaded = False
