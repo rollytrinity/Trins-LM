@@ -14,6 +14,7 @@ import nltk
 import huggingface_hub 
 
 st.set_page_config(layout="wide", page_title="Trin's LM Explorer", page_icon=":robot:")
+open(custom_dataset_path, "w").close()
 logging.basicConfig(level=logging.DEBUG)
 
 left_co, cent_co,last_co = st.columns(3)
