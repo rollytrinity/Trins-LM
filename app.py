@@ -273,8 +273,7 @@ with tab4:
     
     # Check if the custom dataset is empty
     if is_custom_dataset_empty() and dataset_choice == "Custom Dataset":
-        st.warning("The custom dataset is empty! Please add some sentences before generating text.")
-        st.stop()  # Stop further execution
+        st.warning("The custom dataset is empty! Please add some sentences before generating text.")  # Stop further execution
 
     if st.button("Train and generate text"):
         generated_text = trigram_model.generate_sentence("")
