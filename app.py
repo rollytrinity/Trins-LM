@@ -91,8 +91,8 @@ with tab2:
     
     st.header("Where should I start?")
     st.markdown("""
-    Start with the **Activities** tab to learn about what language models are and how they work. You will be guided through each of the interactive examples on the site and be able to try them out for yourself, complete with explanations.
-    However, if you like, or if you already have some understanding of language models, you can skip straight to experimenting, and come back to the **Activities** page for information as you wish.
+    Start with the **Home** tab to learn about what language models are and how they work. You will be guided through each of the interactive examples on the site and be able to try them out for yourself, complete with explanations.
+    However, if you like, or if you already have some understanding of language models, you can skip straight to experimenting, and come back to the **Home** page for information as you wish.
     \n
     The **Further Resources** tab has links to videos, articles, and demos that explain language models in more detail, if you want to learn more about them.
     """)
