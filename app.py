@@ -15,11 +15,6 @@ import huggingface_hub
 
 st.set_page_config(layout="wide", page_title="Trin's LM Explorer", page_icon=":robot:")
 
-custom_dataset_path = "data/custom_dataset.txt"
-open(custom_dataset_path, "w").close()
-
-logging.basicConfig(level=logging.DEBUG)
-
 left_co, cent_co,last_co = st.columns(3)
 with cent_co:
     st.image('pics/trinslm.png')
@@ -61,8 +56,12 @@ def is_custom_dataset_empty():
     return os.path.exists(custom_dataset_path) and os.path.getsize(custom_dataset_path) == 0
     
 
-# Define dataset path
 dataset_options = {"Hunger Games": "data/hunger_games.txt", "Kung Fu Panda": "data/KFP1Script.csv"}
+custom_dataset_path = "data/custom_dataset.txt"
+
+if "custom_data_initalised" not in st.session_state:
+    st.session_state.custom_data_initalised = True
+    open(custom_dataset_path, "w").close()
 
 
 if "embeddings loaded" not in st.session_state:
@@ -70,10 +69,10 @@ if "embeddings loaded" not in st.session_state:
 
 # Create a multi-page app with sidebar options as a list
 
-tab1, tab2, tab3, tab4, tab5, tab6, tab7 = st.tabs(["🏠 Home", "🧩 Activities", "📚 Words as Vectors", "📝 Train a Language Model", "➕ Add Sentences", "📊 Visualising Prediction", "🔍 Further Resources"])
+tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs(["🏠 Home", "❔ About", "📚 Words as Vectors", "📝 Train a Language Model", "📊 Visualising Prediction", "🔍 Further Resources"])
 
 
-with tab1:
+with tab2:
     st.title("Welcome to Trin's Fantastic Language Model Explorer")
 
     st.header("What is this site?")
@@ -104,8 +103,8 @@ with tab1:
     """)
     
     
-with tab2:
-    st.header("Activities")
+with tab1:
+    st.header("Home")
 
     with st.expander("**1) Thinking about language**"):
 
@@ -136,12 +135,46 @@ with tab2:
 
         Language models such as ChatGPT work by predicting the next most likely word in a text. Here's ChatGPT's own (correct!) response to what a language model is.
                         """)
-            
-        st.image("pics/model_explanation.png", width=700)
+
+        def text_convo(conversation):
+            # CSS style for the chat bubble
+            bubble_style = """
+                background-color: white;
+                padding: 10px 15px;
+                border-radius: 10px;
+                box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+                max-width: 80%;
+                display: inline-block;
+            """
+
+            # Loop through messages and display them with styling
+            for message in conversation:
+                col1, col2 = st.columns([1, 1])
+                bubble = f"<div style='{bubble_style}'><strong>{message['speaker']}</strong><br>{message['text']}</div>"
+                
+                if message["speaker"] == "Trin":
+                    with col1:
+                        st.markdown(bubble, unsafe_allow_html=True)
+                else:
+                    with col2:
+                        st.markdown(f"<div style='text-align: right'>{bubble}</div>", unsafe_allow_html=True)
+
+        conversation = [
+            {"speaker": "Trin", "text": "Tell me in simple terms what a language model is."},
+            {"speaker": "ChatGPT", "text": "A language model is a computer program that learns to understand and generate human language. It looks at a lot of text, learns patterns, then uses that knowledge to predict or create words, sentences, or even whole paragraphs. It's kind of like a super-smart autocomplete! 😊"},
+        ]
+
+        text_convo(conversation)
+        st.markdown("\n")
 
         st.markdown("If we try asking ChatGPT how it is:")
-
-        st.image("pics/how_are_You.png", width=700)
+        conversation = [
+            {"speaker": "Trin", "text": "Hello, how are you doing??"},
+            {"speaker": "ChatGPT", "text": "Hello, I'm doing great, thanks for asking. How are you?"},
+        ]
+        
+        text_convo(conversation)
+        st.markdown("\n")
                     
         st.markdown("This response is the most predictable answer to the question – the language model is predicting the next most likely sequence of words.")
 
@@ -224,7 +257,7 @@ with tab2:
         They use billions of parameters, billions of words to train, and have extremely complex understandings of language. 
         
         \n
-        If you've been living under a rock, you can take a look at [ChatGPT](https://chat.openai.com/) to see how these models work in action. You can ask it questions, and it will respond with human-like text.
+        If you've not yet interacted with it, you can take a look at [ChatGPT](https://chat.openai.com/) to see how these models work in action. You can ask it questions, and it will respond with human-like text.
         \n
         Try navigating to the **Visualising Prediction** tab to have more insight into how predictions are made. You can enter a sentence and see the most likely next words, along with their probabilities.
         The model assigns probabilities to different words which helps to decide what sequence should come next.
@@ -275,7 +308,7 @@ with tab4:
     if is_custom_dataset_empty() and dataset_choice == "Custom Dataset":
         st.warning("The custom dataset is empty! Please add some sentences before generating text.")  # Stop further execution
 
-    if st.button("Train and generate text"):
+    elif st.button("Train and generate text"):
         generated_text = trigram_model.generate_sentence("")
         st.markdown(f"""
         <div style="font-size: 24px; padding: 20px; border: 1px solid #ddd; background-color: #f4f4f4; color: black; border-radius: 5px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
@@ -290,13 +323,14 @@ with tab4:
     \n
     Pay attention to how the model predicts when the Kung Fu Panda and Hunger Games datasets are used. The model is trained on the text from this media, so it will generate sentences that are similar to the text they contain.
     \n
-    You can try creating your own dataset using the **Add Sentences** tab. This will allow you to add your own sentences to a custom dataset, which can then be used to train the language model.
+    You can try creating your own dataset using the **Add Sentences** option below. This will allow you to add your own sentences to a custom dataset, which can then be used to train the language model.
     Notice how the model struggles with small amounts of data. The generated sentences will be probably be exactly the same as the ones you input, meaning this model is generalising poorly and has a small vocabulary, until you add **lots** of data. It would probably take too long to bother writing sentences yourself! If you like, try inputting some text from somewhere online (try [Wikipedia](https://www.wikipedia.org/)?).
     \n
     This shows us how language models require large amounts of data to be able to make good predictions.    
                             """)
-
-with tab5:
+    
+    st.markdown("__________________________________________________________________")
+    
     st.header("Add Custom Sentences")
     st.markdown("Enter sentences to add to the custom dataset, which can be used to train the language model.")
     
@@ -310,6 +344,7 @@ with tab5:
     if st.button("Clear All Custom Sentences"):
         open(custom_dataset_path, "w").close()  # This clears the file content
         st.success("All custom sentences have been cleared.")
+
 
 
 with tab3:
@@ -350,6 +385,7 @@ with tab3:
         embeddings = st.session_state.embeddings
 
         words = st.session_state.city_words + st.session_state.animal_words + st.session_state.your_words
+
         vectors = np.array([embeddings[word] for word in words])
         reduced = st.session_state.tsne.fit_transform(vectors)
 
@@ -367,6 +403,7 @@ with tab3:
 
         # Plot with Plotly
         fig = px.scatter(df, x="x", y="y", text="word", color="group", color_discrete_sequence=pastel_palette)
+        fig.for_each_trace(lambda t: t.update(textfont_color="#554059"))
         fig.update_traces(marker=dict(size=12))
         fig.update_traces(textposition='top center')
         fig.update_layout(
@@ -384,8 +421,12 @@ with tab3:
             new_word = st.text_input("Enter a new word to see its vector representation:")
 
         if new_word != "" and new_word not in st.session_state.your_words:
-            st.session_state.your_words.append(new_word)
-            st.rerun()
+            if new_word in embeddings:
+                st.session_state.your_words.append(new_word)
+                st.rerun()
+
+            else:
+                st.warning(f"Word '{new_word}' not recognised. Check your spelling or try another word!")
 
     st.markdown("__________________________________________________________________")
     st.markdown("""
@@ -407,7 +448,7 @@ with tab3:
     )
         
 
-with tab6:
+with tab5:
     @st.cache_resource
     def load_model(model_name="local_gpt2"):
         from transformers import GPT2LMHeadModel, GPT2Tokenizer
@@ -505,14 +546,13 @@ with tab6:
                     labels.append('#D16D82')  # Root node
                     sizes.append(3)
                 elif node in words:
-                    labels.append('#87BBD9')  # First layer
+                    labels.append('#255774')  # First layer
                     sizes.append(2)
                 else:
                     labels.append('#4CAF91')  # Second layer
                     sizes.append(1)
 
-            d3.set_node_properties(color=labels, size=sizes, fontcolor='#785a7d')
-            #d3.set_node_properties(label_color='#785a7d') 
+            d3.set_node_properties(color=labels, size=sizes, fontcolor='#785a7d', fontsize=20)
 
             # Plot
             d3.show(show_slider=False)
@@ -522,7 +562,7 @@ with tab6:
     The graph above will visualise the next most likely words based on your inputs. Type the start of a sentence and press enter!\n""")
 
     st.markdown("<p style='color: #D16D82;'>The red word is the last word you entered.</p>", unsafe_allow_html=True)
-    st.markdown("<p style='color: #87BBD9;'>The blue words are likely to follow the red word, continuing your sentence.</p>", unsafe_allow_html=True)
+    st.markdown("<p style='color: #255774;'>The blue words are likely to follow the red word, continuing your sentence.</p>", unsafe_allow_html=True)
     st.markdown("<p style='color: #4CAF91;'>The green words are likely to follow blue words.</p>", unsafe_allow_html=True)
 
     st.markdown("""
@@ -531,7 +571,7 @@ with tab6:
     The model must use this information to decide which words should come next.
     """)
 
-with tab7:
+with tab6:
     st.header("Further Resources")
 
     st.markdown("""ThreeBlueBrown is a YouTube channel that explains complex maths and AI concepts in an easy-to-understand way. Some videos are more complex than others, but all are super useful for developing intuition around these topics.\n""")
@@ -544,6 +584,7 @@ with tab7:
     st.markdown("""
                 - [Machine Learning for Kids - a set of tutorials for machine learning, aimed at kids but interesting for anyone!](https://machinelearningforkids.co.uk/)
                 - [Teachable Machine - a set of tutorials for machine learning. Less centred around language but teaches fundamentals of AI which are completely relevant!](https://teachablemachine.withgoogle.com/)
+                - [Alternative Teachable Machine, with some more features and better privacy.](https://tm.gen-ai.fi/image/general)
                 - [Word embedding visualisation](https://projector.tensorflow.org/)
                 - [Tensorflow playground, for exploring the internals of neural nets](https://playground.tensorflow.org/#activation=tanh&batchSize=10&dataset=circle&regDataset=reg-plane&learningRate=0.03&regularizationRate=0&noise=0&networkShape=4,2&seed=0.88734&showTestData=false&discretize=false&percTrainData=50&x=true&y=true&xTimesY=false&xSquared=false&ySquared=false&cosX=false&sinX=false&cosY=false&sinY=false&collectStats=false&problem=classification&initZero=false&hideText=false)
                 """)

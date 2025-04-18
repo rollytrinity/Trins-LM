@@ -1,7 +1,8 @@
 [theme]
 base="light"
-primaryColor="#8E7DBE"        # Soft peach for the accent
-backgroundColor="#FADADD"     # Light background
-secondaryBackgroundColor="#f0eef6"  # Light grayish background for secondary areas
-textColor="#785a7d"           # Dark gray text
-font="monospace"             # Clean, modern font
+primaryColor="#8E7DBE"        
+backgroundColor="#FADADD"     
+secondaryBackgroundColor="#f0eef6"  
+textColor="#554059"           
+font="monospace"   
+baseFontSize = 18         
