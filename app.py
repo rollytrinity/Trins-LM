@@ -452,19 +452,18 @@ with tab5:
     @st.cache_resource
     def load_model(model_name="local_gpt2"):
         from transformers import GPT2LMHeadModel, GPT2Tokenizer
-        if os.path.exists('/models/local_gpt2'):
-            model = GPT2LMHeadModel.from_pretrained('/models/local_gpt2')
-            tokenizer = GPT2Tokenizer.from_pretrained('/models/local_gpt2')
-            
+        if os.path.exists('models/local_gpt2') and os.listdir('models/local_gpt2'):
+            model = GPT2LMHeadModel.from_pretrained('models/local_gpt2')
+            tokenizer = GPT2Tokenizer.from_pretrained('models/local_gpt2')
         else:
             model = GPT2LMHeadModel.from_pretrained(model_name)
             tokenizer = GPT2Tokenizer.from_pretrained(model_name)
+            
+            os.makedirs('models/local_gpt2', exist_ok=True)
+            model.save_pretrained('models/local_gpt2')
+            tokenizer.save_pretrained('models/local_gpt2')
 
-            # Save the model locally
-            model.save_pretrained('/models/local_gpt2')
-            tokenizer.save_pretrained('/models/local_gpt2')
         return model, tokenizer
-
     
         
     if "model" not in st.session_state or "tokenizer" not in st.session_state:
